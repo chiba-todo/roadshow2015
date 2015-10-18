@@ -1,0 +1,33 @@
+.tickercontainer { /* the outer div with the black border */
+width: 1200px;
+height: 120px;
+margin: 0;
+padding: 0;
+overflow: hidden;
+}
+.tickercontainer .mask { /* that serves as a mask. so you get a sort of padding both left and right */
+position: relative;
+top: 8px;
+height: 1000px;
+width: 1200px;　/* ティッカーの帯の幅*/
+overflow: hidden;
+}
+ul.newsticker { /* that's your list */
+position: relative;
+height:30px;
+/*left: 750px;*/
+font: bold 10px Verdana;
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+ul.newsticker li {
+float: left; /* important: display inline gives incorrect results when you check for elem's width */
+margin: 0;
+padding-right: 15px;
+color: #000; /* ティッカーの文字の色 */
+font-size: 90px; /* ティッカーの文字のサイズ*/
+font-family: "Hiragino Kaku Gothic ProN","メイリオ,arial";
+/*background-color: black; /* ティッカーの背景色*/*/
+/*font-family: sans-serif;*/
+}

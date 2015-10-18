@@ -1,0 +1,22 @@
+video {
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    z-index: -100;
+    background-size: cover;
+}
+
+#video2, #video3, #video4, #video5 {
+    display: none;
+}
+
+#logo {
+  /*position: fixed;*/
+  position:absolute;
+  top:20px;
+  right:20px;
+}

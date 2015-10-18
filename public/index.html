@@ -3,7 +3,12 @@
   <head>
     <meta charset="UTF-8">
     <title>Sensor Data Visualization</title>
+    <link rel="stylesheet" type="text/css" href="heart.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="./css/webticker.css">
+	<script type="text/javascript" src="js/jquery.webticker.js"></script>
+	<link rel="stylesheet" type="text/css" href="video.css">
+	<script type="text/javascript" src="video.js"></script>
     <script type="text/javascript" src="https://www.google.com/jsapi?autoload={
             'modules':[{
               'name':'visualization',
@@ -23,13 +28,17 @@
         var webSocket = null;
       
 //      var socket;
-		var temperatureData, humidityData, illuminanceData;
-		var temperatureOptions, humidityOptions, illuminanceOptions;
-		var temperatureChart, humidityChart, illuminanceChart;
+		var temperatureData, humidityData, illuminanceData, hoge1Data, hoge2Data;
+		var temperatureOptions, humidityOptions, illuminanceOptions, hoge1Options, hoge2Options;
+		var temperatureChart, humidityChart, illuminanceChart, hoge1Chart, hoge2Chart;
 
 		var temperatureArrey = [['Time', 'Planz Factory']];
 		var humidityArrey = [['Time', 'Planz Factory']];
 		var illuminanceArrey = [['Time', 'Planz Factory']];
+        var hoge1Arrey = [['Time', 'Planz Factory']];
+        var hoge2Arrey = [['Time', 'Planz Factory']];
+
+
 
 		var cont = 0;
       
@@ -55,58 +64,107 @@
 	          ['Time', 'Planz Factory'],
 	          ['', 0]
 	        ]);
+
+        // Data for illuminance chart
+            hoge1Data = google.visualization.arrayToDataTable([
+              ['Time', 'Planz Factory'],
+              ['', 0]
+            ]);
+
+        // Data for illuminance chart
+            hoge2Data = google.visualization.arrayToDataTable([
+              ['Time', 'Planz Factory'],
+              ['', 0]
+            ]);
         
 
         // Option for temperature chart
         // If you want to set other options, please refer to https://developers.google.com/chart/interactive/docs/gallery/gauge
 	        temperatureOptions = {
-	          	title: 'myTemperature',
-	          	width: 800, height: 300,
+	          	title: '温度1',
+                titleTextStyle: { fontName: "Hiragino Kaku Gothic ProN", fontSize: 20},
+	          	width: 250, height: 150,
 	          	curveType: 'function',
 	          	legend: { position: 'right' },
 	          // chartArea: {width: '300'}   // グラフ横幅（ピクセル）
 	          	hAxis: {gridlines:{count:'5'},
+
 	//          		showTextEvery: 10,
 	          		slantedText: true,  // 横軸の目盛テキストを斜めに表示
 	          							// （データ数が多いときは文字が重ならないように自動的に間引かれる）
 	          		slantedTextAngle: '30',  // 横軸の目盛テキストの角度
 	      		},
-				chartArea:{left:50,top:40,width:'70%',height:'50%'},
+				chartArea:{left:50,top:40,width:'70%',height:'60%',fontSize:20},
 	        };
 	        
 	        // Option for humidity chart
 	        humidityOptions = {
-	          	title: 'myHumidity',
-	          	width: 800, height: 300,
+	          	title: '温度2',
+                titleTextStyle: { fontName: "Hiragino Kaku Gothic ProN", fontSize: 20},
+	          	width: 250, height: 150,
 	          	curveType: 'function',
 	          	legend: { position: 'right' },
 	          	hAxis: {gridlines:{count:'5'},
 	          		slantedText: true,  // 横軸の目盛テキストを斜めに表示
 	          		slantedTextAngle: '30',  // 横軸の目盛テキストの角度
 	      		},
-				chartArea:{left:50,top:40,width:'70%',height:'50%'},
+				chartArea:{left:50,top:40,width:'70%',height:'60%'},
 	        };
 
 	        // Option for humidity chart
 	        illuminanceOptions = {
-	          	title: 'myIlluminance',
-	          	width: 800, height: 300,
+	          	title: '明るさ',
+                titleTextStyle: { fontName: "Hiragino Kaku Gothic ProN", fontSize: 20},
+	          	width: 250, height: 150,
 	          	curveType: 'function',
 	          	legend: { position: 'right' },
 	          	hAxis: {gridlines:{count:'5'},
 	          		slantedText: true,  // 横軸の目盛テキストを斜めに表示
 	          		slantedTextAngle: '30',  // 横軸の目盛テキストの角度
 	      		},
-				chartArea:{left:50,top:40,width:'70%',height:'50%'},
+				chartArea:{left:50,top:40,width:'70%',height:'60%'},
 	        };
+
+            // Option for humidity chart
+            hoge1Options = {
+                title: '生体反応1',
+                titleTextStyle: { fontName: "Hiragino Kaku Gothic ProN", fontSize: 20},
+                width: 250, height: 150,
+                curveType: 'function',
+                legend: { position: 'right' },
+                hAxis: {gridlines:{count:'5'},
+                    slantedText: true,  // 横軸の目盛テキストを斜めに表示
+                    slantedTextAngle: '30',  // 横軸の目盛テキストの角度
+                },
+                chartArea:{left:50,top:40,width:'70%',height:'60%'},
+            };
+
+            // Option for humidity chart
+            hoge2Options = {
+                title: '生体反応2',
+                titleTextStyle: { fontName: "Hiragino Kaku Gothic ProN", fontSize: 20},
+                width: 250, height: 150,
+                curveType: 'function',
+                legend: { position: 'right' },
+                hAxis: {gridlines:{count:'5'},
+                    slantedText: true,  // 横軸の目盛テキストを斜めに表示
+                    slantedTextAngle: '30',  // 横軸の目盛テキストの角度
+                },
+                chartArea:{left:50,top:40,width:'70%',height:'60%'},
+            };
         
 	        temperatureChart = new google.visualization.LineChart(document.getElementById('temperatureChart'));
 	        humidityChart = new google.visualization.LineChart(document.getElementById('humidityChart'));
 	        illuminanceChart = new google.visualization.LineChart(document.getElementById('illuminanceChart'));
+            hoge1Chart = new google.visualization.LineChart(document.getElementById('hoge1Chart'));
+            hoge2Chart = new google.visualization.LineChart(document.getElementById('hoge2Chart'));
 
 	        temperatureChart.draw(temperatureData, temperatureOptions);
 	        humidityChart.draw(humidityData, humidityOptions);
 	        illuminanceChart.draw(illuminanceData, illuminanceOptions);
+            hoge1Chart.draw(hoge1Data, hoge1Options);
+            hoge2Chart.draw(hoge2Data, hoge2Options);
+
         };
 
       	function connect() {
@@ -136,8 +194,6 @@
 	        temperatureArrey.push([sensorData.Timestamp, sensorData.Temperature]);
 	        // 配列をグラフ用オブジェクトに変換
 	        temperatureData = google.visualization.arrayToDataTable(temperatureArrey);
-	// console.log(temperatureArrey);
-	// console.log(temperatureArrey[1][0]);       // temperatureData.setValue(cont, 0, sensorData.Timestamp);
 			// グラフタイトルの編集（最新と最古のタイムスタンプを表示する）
 			temperatureOptions.title = "Temperature  " +  temperatureArrey[1][0] + " - " +  temperatureArrey[ temperatureArrey.length - 1][0];
 			// 横軸テキストの表示間隔は、データ数が増えても５つくらいに
@@ -155,10 +211,23 @@
 			illuminanceOptions.title = "Illuminance  " +  illuminanceArrey[1][0] + " - " +  illuminanceArrey[illuminanceArrey.length - 1][0];
 			illuminanceOptions.hAxis.showTextEvery = parseInt(illuminanceArrey.length / 5);
           
+                        // Update temperature data
+            hoge1Arrey.push([sensorData.Timestamp, sensorData.Lux]);
+            hoge1Data = google.visualization.arrayToDataTable(hoge1Arrey);
+            hoge1Options.title = "Illuminance  " +  hoge1Arrey[1][0] + " - " +  hoge1Arrey[hoge1Arrey.length - 1][0];
+            hoge1Options.hAxis.showTextEvery = parseInt(hoge1Arrey.length / 5);
+
+                        // Update temperature data
+            hoge2Arrey.push([sensorData.Timestamp, sensorData.Lux]);
+            hoge2Data = google.visualization.arrayToDataTable(hoge1Arrey);
+            hoge2Options.title = "Illuminance  " +  hoge2Arrey[1][0] + " - " +  hoge2Arrey[hoge2Arrey.length - 1][0];
+            hoge2Options.hAxis.showTextEvery = parseInt(hoge2Arrey.length / 5);
 
 			temperatureChart.draw(temperatureData, temperatureOptions);
 			humidityChart.draw(humidityData, humidityOptions);
 			illuminanceChart.draw(illuminanceData, illuminanceOptions);
+            hoge1Chart.draw(hoge1Data, hoge1Options);
+            hoge2Chart.draw(hoge2Data, hoge2Options);
 
           	cont++;
         }
@@ -177,16 +246,26 @@
     </script>
   </head>
   <body>
-    <h1>Information from Weather Monitor</h1>
-    <div>
+<!--     <h1>Information from Weather Monitor</h1>
+ -->    <div>
       <!-- <button onclick="connect()">Connect</button> -->
       <!-- <button onclick="disconnect()">Disconnect</button> -->
     </div>
-    
-    <div>
-      <div id="temperatureChart" style="width: 900px; height: 200px"></div>
-      <div id="humidityChart" style="width: 900px; height: 200px;"></div>
-      <div id="illuminanceChart" style="width: 900px; height: 200px;"></div>
+    <ul id="webticker">
+        <li>わたし、生きてまーす。</li>
+        <li>ちゃんと息してまーす。</li>
+    </ul>
+    <div class="heart heart1"></div>
+	<div class="heart heart2"></div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+    <div id="chartList">
+        <div id="temperatureChart" class="opacity" style="width: 250px; height: 150px; float: left;"></div>
+        <div id="humidityChart" class="opacity" style="width: 250px; height: 150px; float: left;"></div>
+        <div id="illuminanceChart" class="opacity" style="width: 250px; height: 150px; float: left;"></div>
+        <div id="hoge1Chart" class="opacity" style="width: 250px; height: 150px; float: left;"></div>
+        <div id="hoge2Chart" class="opacity" style="width: 250px; height: 150px; float: left;"></div>
     </div>
+
+
   </body>
 </html>
